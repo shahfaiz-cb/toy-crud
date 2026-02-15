@@ -1,5 +1,6 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const Dotenv = require("dotenv-webpack")
 
 const OUT_DIR = "build"
 const PORT = 3001
@@ -38,6 +39,10 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./public/index.html"
+        }),
+        new Dotenv({
+            silent: true,
+            allowEmptyValues: true
         })
     ],
 
