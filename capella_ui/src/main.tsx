@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client"
+import './app.css'
 
 const App = () => {
     const callBackend = async () => {
@@ -14,7 +15,7 @@ const App = () => {
 
     return (
         <div>
-            <h1>Webpack + React + TS</h1>
+            <h1 className="font-bold text-xl bg-green-500 font-mono">Webpack + React + TS</h1>
             <button onClick={callBackend}>Call Backend</button>
         </div>
     )
