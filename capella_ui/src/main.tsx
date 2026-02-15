@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client"
 import './app.css'
 import { createBrowserRouter } from "react-router-dom";
-import { routes } from "./routing/routes";
+import { routes } from "routing/routes";
 import { RouterProvider } from "react-router";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { persistOptions, queryClient } from "./utils/react-query";
+import { persistOptions, queryClient } from "utils/react-query";
 
 const router = createBrowserRouter(routes)
 

@@ -1,6 +1,6 @@
+import { Home } from "pages/home";
+import { NotFoundPage } from "pages/not-found";
 import { RouteObject, useRouteError } from "react-router-dom";
-import { NotFoundPage } from "../pages/not-found";
-import { Home } from "../pages/home";
 
 function TopLevelErrorBoundary() {
     const error = useRouteError()
