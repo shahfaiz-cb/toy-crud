@@ -1,14 +1,13 @@
 {
   "name": "capella_ui",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "ui application for the toy crud using react + typescript + webpack",
   "scripts": {
     "start": "webpack serve --open",
     "build": "webpack"
   },
   "keywords": [],
-  "author": "",
+  "author": "Faizaan Hussain",
   "license": "ISC",
   "type": "module",
   "dependencies": {
