@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { Axios, AxiosError, AxiosRequestConfig } from "axios";
 import { config } from "config/config";
+import toast from "react-hot-toast";
 
 const API_URL = config.API_URL
 
@@ -7,14 +8,28 @@ export const httpClient = axios.create({
     baseURL: API_URL
 })
 
+export interface ApiResponse<T> {
+    data?: T,
+    success: boolean,
+    message?: string,
+    error?: string
+}
+
 async function request<T>(config: AxiosRequestConfig) {
     return httpClient
-        .request<T>(config)
+        .request<ApiResponse<T>>(config)
         .then((response) => (
             response.data
         ))
-        .catch((error: AxiosError) => {
-            throw error.response?.data ?? error
+        .catch((error) => {
+            if(axios.isAxiosError(error) && error.response) {
+                return error.response.data as ApiResponse<T>
+            }
+            // any other error
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error",
+            } as ApiResponse<T>
         })
 }
 
