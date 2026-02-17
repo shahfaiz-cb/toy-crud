@@ -1,5 +1,7 @@
+import { AuthLayout } from "layouts/auth-layout";
 import { Home } from "pages/home";
 import { NotFoundPage } from "pages/not-found";
+import { SignUpPage } from "pages/sign-up";
 import { RouteObject, useRouteError } from "react-router-dom";
 
 function TopLevelErrorBoundary() {
@@ -21,6 +23,16 @@ export const routes: RouteObject[] = [
             {
                 index:true,
                 element: <Home/>,
+            },
+            {
+                path: "/auth",
+                element: <AuthLayout/>,
+                children: [
+                    {
+                        path: "sign-up",
+                        element: <SignUpPage/>
+                    }
+                ]
             }
         ]
     }

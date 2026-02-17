@@ -4,6 +4,7 @@ const Dotenv = require("dotenv-webpack")
 
 const OUT_DIR = "build"
 const PORT = 3001
+const PUBLIC_PATH = "/"
 
 module.exports = {
     entry: "./src/main.tsx",
@@ -11,7 +12,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, OUT_DIR),
         clean: true,
-        filename: "bundle.js"
+        filename: "bundle.js",
+        publicPath: PUBLIC_PATH
     },
 
     resolve: {
