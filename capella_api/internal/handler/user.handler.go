@@ -32,6 +32,10 @@ type SignupRequest struct {
 func (h *UserHandler) Register(r *mux.Router) {
 	auth := r.PathPrefix("/api/v1/auth").Subrouter()
 
+	auth.Methods(http.MethodOptions).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
 	auth.HandleFunc("/sign-up", h.Signup).Methods(http.MethodPost)
 	auth.HandleFunc("/login", h.Login).Methods(http.MethodPost)
 }
