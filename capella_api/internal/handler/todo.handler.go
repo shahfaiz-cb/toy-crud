@@ -26,6 +26,10 @@ func NewTodoHandler(service *service.TodoService) *TodoHandler {
 func (h *TodoHandler) Register(r *mux.Router, secret string) {
 	todos := r.PathPrefix("/api/v1/todos").Subrouter()
 
+	todos.Methods(http.MethodOptions).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
 	authMiddleware := middleware.JWTAuth(secret)
 	todos.Use(authMiddleware)
 
