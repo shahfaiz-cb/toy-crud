@@ -1,6 +1,7 @@
 import { AuthLayout } from "layouts/auth-layout";
 import { Home } from "pages/home";
 import { NotFoundPage } from "pages/not-found";
+import { SignInPage } from "pages/sign-in";
 import { SignUpPage } from "pages/sign-up";
 import { RouteObject, useRouteError } from "react-router-dom";
 
@@ -31,7 +32,11 @@ export const routes: RouteObject[] = [
                     {
                         path: "sign-up",
                         element: <SignUpPage/>
-                    }
+                    },
+                    {
+                        path: "sign-in",
+                        element: <SignInPage/>
+                    },
                 ]
             }
         ]
