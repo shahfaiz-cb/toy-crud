@@ -1,4 +1,5 @@
 import { AuthLayout } from "layouts/auth-layout";
+import { DashboardPage } from "pages/dashboard";
 import { Home } from "pages/home";
 import { NotFoundPage } from "pages/not-found";
 import { SignInPage } from "pages/sign-in";
@@ -42,6 +43,9 @@ export const routes: RouteObject[] = [
                         element: <SignInPage/>
                     },
                 ]
+            }, {
+                path: "/dashboard",
+                element: <DashboardPage/>
             }
         ]
     }
