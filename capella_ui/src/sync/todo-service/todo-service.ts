@@ -1,5 +1,5 @@
 import { deleteRequest, getRequest, postRequest, putRequest } from "sync/request";
-import { CreateTodoPayload, CreateTodoResponse, DeleteTodoResponse, EditTodoPayload, EditTodoResponse, GetTodosResponse } from "./todo-service.types";
+import { CreateTodoPayload, CreateTodoResponse, DeleteTodoResponse, EditTodoPayload, EditTodoResponse, GetTodosResponse, UpdateTodoStatusPayload, UpdateTodoStatusResponse } from "./todo-service.types";
 
 export async function getTodos() {
     return getRequest<GetTodosResponse>("/todos").then((response) => response.data)
@@ -15,4 +15,8 @@ export async function editTodo({data, todoId}: {data: EditTodoPayload, todoId: s
 
 export async function deleteTodo(todoId: string) {
     return deleteRequest<DeleteTodoResponse>(`/todos/t/${todoId}`)
+}
+
+export async function updateStatus({data, todoId}: {data: UpdateTodoStatusPayload, todoId: string}) {
+    return putRequest<UpdateTodoStatusResponse>(`/todos/t/${todoId}/status`, { data })
 }

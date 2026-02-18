@@ -21,3 +21,9 @@ export type EditTodoPayload = {
 export type EditTodoResponse = Todo
 
 export type DeleteTodoResponse = Todo
+
+export type UpdateTodoStatusPayload = {
+    status: string
+}
+
+export type UpdateTodoStatusResponse = Todo

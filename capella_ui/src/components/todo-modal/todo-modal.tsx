@@ -16,10 +16,11 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useCreateTodo } from "./hooks/use-create-todo";
 import { Priority, Status } from "types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEditTodo } from "./hooks/use-edit-todo";
 import { TrashBin } from "@gravity-ui/icons";
 import { useDeleteTodo } from "./hooks/use-delete-todo";
+import { useUpdateStatus } from "./hooks/use-update-status";
 
 type CreateTodoForm = {
     title: string;
@@ -55,17 +56,22 @@ export function TodoModal({ state, edit=false, title, description, status, prior
             setValue("description", description || "")
             setValue("priority", priority || 0)
             setValue("tags", tags?.join(", ") || "")
+            setStatusValue(status ?? "")
         } else {
             setValue("title", "")
             setValue("description", "")
             setValue("priority", 0)
             setValue("tags", "")
+            setStatusValue("")
         }
     }, [state])
+
+    const [ statusValue, setStatusValue ] = useState<string>(status ?? "")
 
     const { mutate: createMutate, isPending: createIsPending } = useCreateTodo(state)
     const { mutate: editMutate, isPending: editIsPending } = useEditTodo(state)
     const { mutate: deleteMutate, isPending: deleteIsPending } = useDeleteTodo(state)
+    const { mutate: updateStatusMutate, isPending: isUpdateStatusPending } = useUpdateStatus(state)
 
     const onSubmit = (data: CreateTodoForm) => {
         const formatted = {
@@ -96,7 +102,7 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                         <Modal.Header>
                             <Modal.Heading className="flex justify-between items-center">{edit ? "Edit Mode" : "Create Todo"}
                                 {
-                                    edit && <Button isIconOnly variant="danger" isPending={deleteIsPending || editIsPending || createIsPending} onClick={() => deleteMutate(id ??"")}>
+                                    edit && <Button isIconOnly variant="danger" isPending={deleteIsPending || editIsPending || createIsPending || isUpdateStatusPending} onClick={() => deleteMutate(id ??"")}>
                                                 {deleteIsPending ? <Spinner size="sm" color="current"/> : <TrashBin/>}
                                             </Button>
                                 }
@@ -262,6 +268,47 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                                     )}
                                 />
 
+                                {
+                                    edit && <Select value={statusValue} onChange={(e) => {
+                                        setStatusValue(e?.toString() ?? "")
+                                        updateStatusMutate({
+                                            data: {
+                                                status: e?.toString() ?? "",
+                                            },
+                                            todoId: id ?? ""
+                                        })
+                                    }}>
+                                        <Label>Status</Label>
+                                            <Select.Trigger>
+                                                <Select.Value />
+                                                <Select.Indicator />
+                                            </Select.Trigger>
+
+                                            <Description>
+                                                Choose task status
+                                            </Description>
+
+                                            <Select.Popover>
+                                                <ListBox>
+                                                    <ListBox.Item key="Completed" id={"completed"} textValue="Completed">
+                                                        <Label>Completed</Label>
+                                                        <ListBox.ItemIndicator />
+                                                    </ListBox.Item>
+
+                                                    <ListBox.Item key="In Progress" id={"in_progress"} textValue="In Progress">
+                                                        <Label>In Progress</Label>
+                                                        <ListBox.ItemIndicator />
+                                                    </ListBox.Item>
+
+                                                    <ListBox.Item key="Pending" id={"pending"} textValue="Pending">
+                                                        <Label>Pending</Label>
+                                                        <ListBox.ItemIndicator />
+                                                    </ListBox.Item>
+                                                </ListBox>
+                                            </Select.Popover>
+                                    </Select>
+                                }
+
                                 <div className="flex justify-end gap-2 pt-2">
                                     <Button
                                         variant="secondary"
@@ -270,12 +317,12 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                                             reset()
                                             state.close()
                                         }}
-                                        isDisabled={createIsPending || editIsPending || deleteIsPending}
+                                        isDisabled={createIsPending || editIsPending || deleteIsPending || isUpdateStatusPending}
                                     >
                                         Cancel
                                     </Button>
 
-                                    <Button type="submit" isPending={createIsPending || editIsPending || deleteIsPending} isDisabled={!isValid}>
+                                    <Button type="submit" isPending={createIsPending || editIsPending || deleteIsPending || isUpdateStatusPending} isDisabled={!isValid}>
                                         { edit ? "Edit" : "Create"}
                                         {(createIsPending || editIsPending) && <Spinner color="current" size="sm"/>}
                                     </Button>
