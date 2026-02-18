@@ -19,3 +19,5 @@ export type EditTodoPayload = {
 }
 
 export type EditTodoResponse = Todo
+
+export type DeleteTodoResponse = Todo

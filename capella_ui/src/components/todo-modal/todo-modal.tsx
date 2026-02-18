@@ -18,6 +18,8 @@ import { useCreateTodo } from "./hooks/use-create-todo";
 import { Priority, Status } from "types";
 import { useEffect } from "react";
 import { useEditTodo } from "./hooks/use-edit-todo";
+import { TrashBin } from "@gravity-ui/icons";
+import { useDeleteTodo } from "./hooks/use-delete-todo";
 
 type CreateTodoForm = {
     title: string;
@@ -61,8 +63,9 @@ export function TodoModal({ state, edit=false, title, description, status, prior
         }
     }, [state])
 
-    const { mutate: createMutate, isPending: createIsPending } = useCreateTodo(reset, state)
-    const { mutate: editMutate, isPending: editIsPending } = useEditTodo(reset, state)
+    const { mutate: createMutate, isPending: createIsPending } = useCreateTodo(state)
+    const { mutate: editMutate, isPending: editIsPending } = useEditTodo(state)
+    const { mutate: deleteMutate, isPending: deleteIsPending } = useDeleteTodo(state)
 
     const onSubmit = (data: CreateTodoForm) => {
         const formatted = {
@@ -91,7 +94,12 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                 <Modal.Container>
                     <Modal.Dialog className="sm:max-w-lg">
                         <Modal.Header>
-                            <Modal.Heading>{edit ? "Edit Mode" : "Create Todo"}
+                            <Modal.Heading className="flex justify-between items-center">{edit ? "Edit Mode" : "Create Todo"}
+                                {
+                                    edit && <Button isIconOnly variant="danger" isPending={deleteIsPending || editIsPending || createIsPending} onClick={() => deleteMutate(id ??"")}>
+                                                {deleteIsPending ? <Spinner size="sm" color="current"/> : <TrashBin/>}
+                                            </Button>
+                                }
                             </Modal.Heading>
                         </Modal.Header>
 
@@ -100,7 +108,6 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                                 onSubmit={handleSubmit(onSubmit)}
                                 className="space-y-4 px-2"
                             >
-                                {/* Title */}
                                 <Controller
                                     name="title"
                                     control={control}
@@ -131,7 +138,6 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                                     )}
                                 />
 
-                                {/* Description */}
                                 <Controller
                                     name="description"
                                     control={control}
@@ -164,7 +170,6 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                                     )}
                                 />
 
-                                {/* Tags */}
                                 <Controller
                                     name="tags"
                                     control={control}
@@ -265,12 +270,12 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                                             reset()
                                             state.close()
                                         }}
-                                        isDisabled={createIsPending || editIsPending}
+                                        isDisabled={createIsPending || editIsPending || deleteIsPending}
                                     >
                                         Cancel
                                     </Button>
 
-                                    <Button type="submit" isPending={createIsPending || editIsPending} isDisabled={!isValid}>
+                                    <Button type="submit" isPending={createIsPending || editIsPending || deleteIsPending} isDisabled={!isValid}>
                                         { edit ? "Edit" : "Create"}
                                         {(createIsPending || editIsPending) && <Spinner color="current" size="sm"/>}
                                     </Button>
