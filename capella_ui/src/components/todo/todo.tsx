@@ -1,5 +1,6 @@
 import { Card, Chip } from "@heroui/react";
 import { Priority, Status } from "types";
+import { priorityResolver } from "utils";
 
 type TodoProps = {
     title: string;
@@ -37,7 +38,6 @@ export function Todo({
                 ? "accent"
                 : "default";
 
-    const priorityResolver = ["Low", "Medium", "High", "Urgent"]
     return (
         <Card className="w-full shadow-md hover:shadow-lg transition-shadow duration-200 border border-slate-200 rounded-lg">
             <Card.Header className="flex justify-between items-start gap-2">
@@ -56,7 +56,7 @@ export function Todo({
                             {status.replace("_", " ")}
                         </Chip>
                         <Chip color={priorityColor} variant="soft" size="sm">
-                            {priorityResolver[priority]}
+                            {priorityResolver(priority)}
                         </Chip>
                     </div>
                     {
