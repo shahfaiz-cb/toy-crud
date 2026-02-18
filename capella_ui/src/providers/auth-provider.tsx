@@ -5,7 +5,7 @@ type AuthProviderTypes = {
     children: ReactNode
 }
 
-const AUTH_STORAGE_KEY = "cp_jwt"
+export const AUTH_STORAGE_KEY = "cp_jwt"
 
 export function AuthProvider({ children }: AuthProviderTypes) {
     const [token, setToken] = useState<string | null>(() => localStorage.getItem(AUTH_STORAGE_KEY))
