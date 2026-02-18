@@ -7,14 +7,17 @@ import { RouterProvider } from "react-router";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { persistOptions, queryClient } from "utils/react-query";
 import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "providers/auth-provider";
 
 const router = createBrowserRouter(routes)
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
-            <Toaster />
-            <RouterProvider router={router}/>
-        </PersistQueryClientProvider>
+        <AuthProvider>
+            <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
+                <Toaster />
+                <RouterProvider router={router}/>
+            </PersistQueryClientProvider>
+        </AuthProvider>
     </React.StrictMode>
 )
