@@ -14,31 +14,55 @@ import {
     Spinner,
 } from "@heroui/react";
 import { useForm, Controller } from "react-hook-form";
-import { priorityEncode } from "utils";
 import { useCreateTodo } from "./hooks/use-create-todo";
+import { Priority, Status } from "types";
+import { useEffect } from "react";
+import { useEditTodo } from "./hooks/use-edit-todo";
 
 type CreateTodoForm = {
     title: string;
     description: string;
     tags: string;
-    priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
+    priority: 0 | 1 | 2 | 3;
 };
 
 type TodoModalProps = {
     state: UseOverlayStateReturn;
+    edit?: boolean,
+    title?: string
+    description?: string
+    status?: Status
+    priority?: Priority,
+    tags?: string[]
+    id?: string
 };
 
-export function TodoModal({ state }: TodoModalProps) {
-    const { control, handleSubmit, reset, formState: { isValid } } = useForm<CreateTodoForm>({
+export function TodoModal({ state, edit=false, title, description, status, priority, tags, id }: TodoModalProps) {
+    const { control, handleSubmit, reset, formState: { isValid }, setValue } = useForm<CreateTodoForm>({
         defaultValues: {
             title: "",
             description: "",
             tags: "",
-            priority: "LOW",
+            priority: 0,
         },
     });
 
-    const { mutate, isPending } = useCreateTodo(reset, state)
+    useEffect(() => {
+        if(edit) {
+            setValue("title", title || "")
+            setValue("description", description || "")
+            setValue("priority", priority || 0)
+            setValue("tags", tags?.join(", ") || "")
+        } else {
+            setValue("title", "")
+            setValue("description", "")
+            setValue("priority", 0)
+            setValue("tags", "")
+        }
+    }, [state])
+
+    const { mutate: createMutate, isPending: createIsPending } = useCreateTodo(reset, state)
+    const { mutate: editMutate, isPending: editIsPending } = useEditTodo(reset, state)
 
     const onSubmit = (data: CreateTodoForm) => {
         const formatted = {
@@ -47,10 +71,18 @@ export function TodoModal({ state }: TodoModalProps) {
                 .split(",")
                 .map((tag) => tag.trim())
                 .filter(Boolean),
-            priority: priorityEncode(data.priority)
         };
 
-        mutate(formatted)
+        console.log(formatted)
+
+        if(edit) {
+            editMutate({
+                data: formatted,
+                todoId: id ?? ""
+            })
+        } else {
+            createMutate(formatted)
+        }
     };
 
     return (
@@ -59,7 +91,8 @@ export function TodoModal({ state }: TodoModalProps) {
                 <Modal.Container>
                     <Modal.Dialog className="sm:max-w-lg">
                         <Modal.Header>
-                            <Modal.Heading>Todo</Modal.Heading>
+                            <Modal.Heading>{edit ? "Edit Mode" : "Create Todo"}
+                            </Modal.Heading>
                         </Modal.Header>
 
                         <Modal.Body className="space-y-4">
@@ -195,23 +228,23 @@ export function TodoModal({ state }: TodoModalProps) {
 
                                             <Select.Popover>
                                                 <ListBox>
-                                                    <ListBox.Item key="LOW" id={"LOW"} textValue="LOW">
+                                                    <ListBox.Item key="LOW" id={0} textValue="LOW">
                                                         <Label>Low</Label>
                                                         <ListBox.ItemIndicator />
                                                     </ListBox.Item>
 
-                                                    <ListBox.Item key="MEDIUM" id={"MEDIUM"} textValue="MEDIUM">
+                                                    <ListBox.Item key="MEDIUM" id={1} textValue="MEDIUM">
                                                         <Label>Medium</Label>
                                                         <ListBox.ItemIndicator />
                                                     </ListBox.Item>
 
-                                                    <ListBox.Item key="HIGH" id={"HIGH"} textValue="HIGH">
+                                                    <ListBox.Item key="HIGH" id={2} textValue="HIGH">
                                                         <Label>High</Label>
                                                         <ListBox.ItemIndicator />
                                                     </ListBox.Item>
 
-                                                    <ListBox.Item key="URGENT" id={"URGENT"} textValue="URGENT">
-                                                        <Label>High</Label>
+                                                    <ListBox.Item key="URGENT" id={3} textValue="URGENT">
+                                                        <Label>Urgent</Label>
                                                         <ListBox.ItemIndicator />
                                                     </ListBox.Item>
                                                 </ListBox>
@@ -232,14 +265,14 @@ export function TodoModal({ state }: TodoModalProps) {
                                             reset()
                                             state.close()
                                         }}
-                                        isDisabled={isPending}
+                                        isDisabled={createIsPending || editIsPending}
                                     >
                                         Cancel
                                     </Button>
 
-                                    <Button type="submit" isPending={isPending} isDisabled={!isValid}>
-                                        Create
-                                        {isPending && <Spinner color="current" size="sm"/>}
+                                    <Button type="submit" isPending={createIsPending || editIsPending} isDisabled={!isValid}>
+                                        { edit ? "Edit" : "Create"}
+                                        {(createIsPending || editIsPending) && <Spinner color="current" size="sm"/>}
                                     </Button>
                                 </div>
                             </Form>

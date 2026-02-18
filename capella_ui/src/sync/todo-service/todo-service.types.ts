@@ -10,3 +10,12 @@ export type CreateTodoPayload = {
 }
 
 export type CreateTodoResponse = Todo
+
+export type EditTodoPayload = {
+    title: string,
+    description: string,
+    tags: string[],
+    priority: number
+}
+
+export type EditTodoResponse = Todo

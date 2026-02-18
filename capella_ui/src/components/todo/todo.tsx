@@ -11,6 +11,7 @@ type TodoProps = {
     createdAt: Date;
     updatedAt: Date;
     completedAt?: Date;
+    onClick: () => void
 };
 
 export function Todo({
@@ -21,6 +22,7 @@ export function Todo({
     tags,
     createdAt,
     completedAt,
+    onClick
 }: TodoProps) {
     const statusColor =
         status === "completed"
@@ -39,7 +41,7 @@ export function Todo({
                 : "default";
 
     return (
-        <Card className="w-full shadow-md hover:shadow-lg transition-shadow duration-200 border border-slate-200 rounded-lg">
+        <Card className="w-full shadow-md hover:shadow-lg transition-shadow duration-200 border border-slate-200 rounded-lg" onClick={onClick}>
             <Card.Header className="flex justify-between items-start gap-2">
                 <div className="flex justify-between items-center w-full">
                     <Card.Title className="text-lg font-semibold">
