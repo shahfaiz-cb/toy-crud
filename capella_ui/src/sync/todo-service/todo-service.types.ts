@@ -27,3 +27,5 @@ export type UpdateTodoStatusPayload = {
 }
 
 export type UpdateTodoStatusResponse = Todo
+
+export type SearchTodoResponse = Todo[]

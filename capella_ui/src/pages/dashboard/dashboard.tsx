@@ -1,17 +1,30 @@
-import { Button, Modal, useOverlayState } from "@heroui/react";
+import { Button, IconSearch, useOverlayState } from "@heroui/react";
 import { useTodos } from "./hooks/use-todos";
 import { Todo } from "components/todo";
-import { Plus } from "@gravity-ui/icons";
+import { ArrowRight, Plus } from "@gravity-ui/icons";
 import { TodoModal } from "components/todo-modal";
 import { useState } from "react";
 import { Todo as TodoType } from "types";
+import { SearchModal } from "components/search-modal";
+import { useAuth } from "hooks/use-auth";
+import { useNavigate } from "react-router-dom";
 
 export function DashboardPage() {
     const { todos } = useTodos();
     const [ editMode, setEditMode ] = useState(false)
     const [ selectedTodo, setSelectedTodo ] = useState<TodoType | null>(null)
 
+    const { removeJWT } = useAuth()
+    const navigate = useNavigate()
+
     const state = useOverlayState();
+    const searchState = useOverlayState();
+
+    const logout = () => {
+        removeJWT()
+        navigate("/auth/sign-in")
+
+    }
 
     return (
         <div className="p-6 space-y-6">
@@ -24,14 +37,18 @@ export function DashboardPage() {
                         Manage your tasks efficiently
                     </p>
                 </div>
-                <Button variant="primary" onPress={() => {
+                <div className="flex gap-2">
+                    <Button variant="primary" onPress={searchState.open}><span className="hidden sm:inline">Search</span> <IconSearch/></Button>
+                    <Button variant="primary" onPress={() => {
                     setEditMode(false)
                     setSelectedTodo(null)
                     state.open()
-                }}>
-                    Create
-                    <Plus />
-                </Button>
+                    }}>
+                        <span className="hidden sm:inline">Create</span>
+                        <Plus />
+                    </Button>
+                    <Button variant="danger" onPress={logout}><span className="hidden sm:inline">Logout</span> <ArrowRight/></Button>
+                </div>
             </div>
 
             {(!todos || todos.length === 0) && (
@@ -53,6 +70,7 @@ export function DashboardPage() {
             )}
 
             <TodoModal state={state} edit={editMode} {...selectedTodo}/>
+            <SearchModal state={searchState} />
         </div>
     );
 }

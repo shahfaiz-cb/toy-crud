@@ -47,7 +47,7 @@ export function Todo({
                     <Card.Title className="text-lg font-semibold">
                         {title}
                     </Card.Title>
-                    <Card.Description className="text-sm text-slate-500">
+                    <Card.Description className="text-xs sm:text-sm text-slate-500">
                         Created: {new Date(createdAt).toLocaleDateString()}
                     </Card.Description>
                 </div>
@@ -62,7 +62,7 @@ export function Todo({
                         </Chip>
                     </div>
                     {
-                        completedAt && <p className="text-sm text-slate-500">Completed: {new Date(completedAt).toLocaleDateString()}</p>
+                        completedAt && <p className="text-xs sm:text-sm text-slate-500">Completed: {new Date(completedAt).toLocaleDateString()}</p>
                     }
                 </div>
             </Card.Header>
