@@ -4,6 +4,7 @@ import { Home } from "pages/home";
 import { NotFoundPage } from "pages/not-found";
 import { SignInPage } from "pages/sign-in";
 import { SignUpPage } from "pages/sign-up";
+import { PrivateRoutesProvider } from "providers/private-routes-provider";
 import { Navigate, RouteObject, useRouteError } from "react-router-dom";
 
 function TopLevelErrorBoundary() {
@@ -45,7 +46,9 @@ export const routes: RouteObject[] = [
                 ]
             }, {
                 path: "/dashboard",
-                element: <DashboardPage/>
+                element: <PrivateRoutesProvider>
+                    <DashboardPage/>
+                </PrivateRoutesProvider>
             }
         ]
     }
