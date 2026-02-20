@@ -14,20 +14,11 @@ export function DashboardPage() {
     const [ editMode, setEditMode ] = useState(false)
     const [ selectedTodo, setSelectedTodo ] = useState<TodoType | null>(null)
 
-    const { removeJWT } = useAuth()
-    const navigate = useNavigate()
-
     const state = useOverlayState();
     const searchState = useOverlayState();
 
-    const logout = () => {
-        removeJWT()
-        navigate("/auth/sign-in")
-
-    }
-
     return (
-        <div className="p-6 space-y-6">
+        <div className="flex-1 p-6 space-y-6">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-semibold text-slate-800">
@@ -47,7 +38,6 @@ export function DashboardPage() {
                         <span className="hidden sm:inline">Create</span>
                         <Plus />
                     </Button>
-                    <Button variant="danger" onPress={logout}><span className="hidden sm:inline">Logout</span> <ArrowRight/></Button>
                 </div>
             </div>
 

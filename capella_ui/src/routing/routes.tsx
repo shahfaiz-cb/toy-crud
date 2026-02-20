@@ -1,3 +1,4 @@
+import { AppLayout } from "layouts/app-layout";
 import { AuthLayout } from "layouts/auth-layout";
 import { DashboardPage } from "pages/dashboard";
 import { Home } from "pages/home";
@@ -22,6 +23,7 @@ export const routes: RouteObject[] = [
             <TopLevelErrorBoundary/>
         ),
         path: "/",
+        element: <AppLayout/>,
         children: [
             {
                 index:true,
