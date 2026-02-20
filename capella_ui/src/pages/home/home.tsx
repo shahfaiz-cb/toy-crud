@@ -7,7 +7,7 @@ export function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-br from-slate-50 to-slate-200 px-6 text-center">
+    <div className="flex-1 flex flex-col items-center justify-center bg-linear-to-br from-slate-50 to-slate-200 px-6 text-center">
       
       <div className="max-w-2xl space-y-6">
         <h1 className="text-4xl md:text-5xl font-bold text-slate-800">
@@ -19,7 +19,7 @@ export function Home() {
           Stay organized. Stay productive.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-center gap-4 pt-4">
           {!token ? (
             <>
               <Button
