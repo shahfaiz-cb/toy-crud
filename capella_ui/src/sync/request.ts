@@ -2,11 +2,20 @@ import axios, { AxiosRequestConfig } from "axios";
 import { config } from "config/config";
 import { AUTH_STORAGE_KEY } from "providers/auth-provider";
 
-const API_URL = config.API_URL
+const API_URL = config.API_URL;
 
 export const httpClient = axios.create({
     baseURL: API_URL
 })
+
+httpClient.interceptors.request.use((config) => {
+    const token = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+});
 
 export interface ApiResponse<T> {
     data?: T,
@@ -16,22 +25,15 @@ export interface ApiResponse<T> {
 }
 
 async function request<T>(config: AxiosRequestConfig) {
-    httpClient.interceptors.request.use((config) => {
-        const token = localStorage.getItem(AUTH_STORAGE_KEY)
-        if(token) {
-            config.headers.Authorization = `Bearer ${token}`
-        }
-
-        return config
-    })
-
     return httpClient
         .request<ApiResponse<T>>(config)
-        .then((response) => (
-            response.data
-        ))
+        .then((response) => response.data)
         .catch((error) => {
             if(axios.isAxiosError(error) && error.response) {
+                if(error.response?.status === 401 && window.location.pathname !== "/auth/sign-in") {
+                    localStorage.removeItem(AUTH_STORAGE_KEY);
+                    window.location.href = "/auth/sign-in";
+                }
                 return error.response.data as ApiResponse<T>
             }
             // any other error
