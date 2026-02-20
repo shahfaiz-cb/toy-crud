@@ -1,4 +1,4 @@
-import { useAuth } from "hooks/use-auth";
+import { useAuth } from "auth";
 import { Navigate } from "react-router-dom";
 
 type PrivateRoutesProviderProps = {

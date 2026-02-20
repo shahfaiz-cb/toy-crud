@@ -1,4 +1,4 @@
-import { AuthContext } from "contexts/auth-context"
+import { AuthContext } from "auth"
 import { ReactNode, useState } from "react"
 
 type AuthProviderTypes = {
