@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { config } from "config/config";
-import { AUTH_STORAGE_KEY } from "providers/auth-provider";
+import { config } from "./../../config/config";
+import { AUTH_STORAGE_KEY } from "auth";
 
 const API_URL = config.API_URL;
 

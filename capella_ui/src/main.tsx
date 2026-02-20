@@ -7,7 +7,7 @@ import { RouterProvider } from "react-router";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { persistOptions, queryClient } from "utils/react-query";
 import { Toaster } from "react-hot-toast";
-import { AuthProvider } from "providers/auth-provider";
+import { AuthProvider } from "auth";
 
 const router = createBrowserRouter(routes)
 

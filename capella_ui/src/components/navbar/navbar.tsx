@@ -1,6 +1,6 @@
 import { Button } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "hooks/use-auth";
+import { useAuth } from "auth";
 
 export function Navbar() {
   const { token, removeJWT } = useAuth();

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { useAuth } from "hooks/use-auth"
+import { useAuth } from "auth"
 import { getTodos } from "sync/todo-service"
 
 export const useTodos = () => {

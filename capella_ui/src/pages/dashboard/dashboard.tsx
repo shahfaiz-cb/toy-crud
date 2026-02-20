@@ -6,8 +6,6 @@ import { TodoModal } from "components/todo-modal";
 import { useState } from "react";
 import { Todo as TodoType } from "types";
 import { SearchModal } from "components/search-modal";
-import { useAuth } from "hooks/use-auth";
-import { useNavigate } from "react-router-dom";
 
 export function DashboardPage() {
     const { todos } = useTodos();

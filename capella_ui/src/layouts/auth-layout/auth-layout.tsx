@@ -1,4 +1,4 @@
-import { useAuth } from "hooks/use-auth";
+import { useAuth } from "auth";
 import { Navigate, Outlet } from "react-router-dom";
 export function AuthLayout() {
     const { token } = useAuth()
