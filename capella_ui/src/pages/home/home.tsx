@@ -7,14 +7,14 @@ export function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-linear-to-br from-slate-50 to-slate-200 px-6 text-center">
+    <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
       
       <div className="max-w-2xl space-y-6">
-        <h1 className="text-4xl md:text-5xl font-bold text-slate-800">
+        <h1 className="text-4xl md:text-5xl font-bold">
           Welcome to <span className="text-primary">ToyCRUD</span>
         </h1>
 
-        <p className="text-lg text-slate-600">
+        <p className="text-lg text-gray-400">
           A simple yet powerful way to manage your tasks efficiently.
           Stay organized. Stay productive.
         </p>

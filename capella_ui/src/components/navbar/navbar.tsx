@@ -12,7 +12,7 @@ export function Navbar() {
   }
 
   return (
-    <nav className="h-16 flex items-center justify-between px-6 border-b bg-white">
+    <nav className="h-16 flex items-center justify-between px-6 border-b border-divider bg-background backdrop-blur supports-backdrop-filter:bg-background/80">
       <h1
         className="text-lg font-semibold cursor-pointer"
         onClick={() => navigate("/")}
