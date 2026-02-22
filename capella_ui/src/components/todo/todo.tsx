@@ -3,6 +3,7 @@ import { Priority, Status } from "types";
 import { priorityResolver } from "utils";
 
 type TodoProps = {
+    id: string;
     title: string;
     description: string;
     status: Status;
@@ -15,6 +16,7 @@ type TodoProps = {
 };
 
 export function Todo({
+    id,
     title,
     description,
     status,
@@ -51,7 +53,7 @@ export function Todo({
                         Created: {new Date(createdAt).toLocaleDateString()}
                     </Card.Description>
                 </div>
-
+                <div className="text-xs text-gray-500">{id}</div>
                 <div className="flex justify-between w-full">
                     <div className="flex gap-2">
                         <Chip color={statusColor} variant="secondary" size="sm">

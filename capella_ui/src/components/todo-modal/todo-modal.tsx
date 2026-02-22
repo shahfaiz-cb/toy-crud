@@ -110,6 +110,9 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                         </Modal.Header>
 
                         <Modal.Body className="space-y-4">
+                            {
+                                edit && <div>{id}</div>
+                            }
                             <Form
                                 onSubmit={handleSubmit(onSubmit)}
                                 className="space-y-4 px-2"
