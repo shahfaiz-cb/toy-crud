@@ -1,25 +1,30 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 
 	"github.com/couchbase/gocb/v2"
 	"github.com/google/uuid"
 	"github.com/shahfaiz-07/capella_api/internal/model"
+	"github.com/shahfaiz-07/capella_api/internal/sse"
 )
 
 type TodoService struct {
 	cluster    *gocb.Cluster
 	collection *gocb.Collection
+	broker *sse.Broker
 	bucketPath string
 }
 
-func NewTodoService(cluster *gocb.Cluster, collection *gocb.Collection, bucketPath string) *TodoService {
+func NewTodoService(cluster *gocb.Cluster, collection *gocb.Collection, broker *sse.Broker, bucketPath string) *TodoService {
 	return &TodoService{
 		cluster:    cluster,
 		collection: collection,
+		broker: broker,
 		bucketPath: bucketPath,
 	}
 }
@@ -43,6 +48,18 @@ func (s *TodoService) CreateTodo(userId, title, description string, priority mod
 	_, err := s.collection.Insert(newTodo.ID, newTodo, nil)
 	if err != nil {
 		return nil, err
+	}
+
+	msg := sse.Event{
+		Type: sse.TodoCreated,
+		Message: newTodo.ID,
+	}
+
+	message, err := json.Marshal(msg)
+	if err != nil {
+		fmt.Println("Failed to marshal sse event:", err)
+	} else {
+		s.broker.Publish(userId, message)
 	}
 
 	return newTodo, nil
@@ -144,6 +161,19 @@ func (s *TodoService) DeleteTodo(userId, todoId string) (*model.Todo, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		msg := sse.Event{
+			Type: sse.TodoDeleted,
+			Message: todo.ID,
+		}
+
+		message, err := json.Marshal(msg)
+		if err != nil {
+			fmt.Println("Failed to marshal sse event:", err)
+		} else {
+			s.broker.Publish(userId, message)
+		}
+
 		return &todo, nil
 	}
 	// the todo does not belong to user
@@ -184,6 +214,19 @@ func (s *TodoService) UpdateTodo(userId, todoId, title, description string, prio
 		if err != nil {
 			return nil, err
 		}
+
+		msg := sse.Event{
+			Type: sse.TodoUpdated,
+			Message: todo.ID,
+		}
+
+		message, err := json.Marshal(msg)
+		if err != nil {
+			fmt.Println("Failed to marshal sse event:", err)
+		} else {
+			s.broker.Publish(userId, message)
+		}
+
 		return &todo, nil
 	}
 	// the todo does not belong to user
@@ -247,6 +290,18 @@ func (s *TodoService) UpdateStatus(userId, todoId, status string) (*model.Todo, 
 		err = result.Content(&todo)
 		if err != nil {
 			return nil, err
+		}
+
+		msg := sse.Event{
+			Type: sse.TodoUpdated,
+			Message: todo.ID,
+		}
+
+		message, err := json.Marshal(msg)
+		if err != nil {
+			fmt.Println("Failed to marshal sse event:", err)
+		} else {
+			s.broker.Publish(userId, message)
 		}
 
 		return &todo, nil
