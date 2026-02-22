@@ -1,5 +1,5 @@
+import { toast } from "@heroui/react"
 import { useMutation } from "@tanstack/react-query"
-import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 import { register } from "sync/auth-service"
 
@@ -12,7 +12,7 @@ export const useRegister = () => {
                 toast.success(response.message || "Registration successful!")
                 navigate("/auth/sign-in")
             } else {
-                toast.error(response.error || "Registration failed!")
+                toast.danger(response.error || "Registration failed!")
             }
         }
     })
