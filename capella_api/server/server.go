@@ -11,6 +11,7 @@ import (
 	"github.com/shahfaiz-07/capella_api/internal/middleware"
 	"github.com/shahfaiz-07/capella_api/internal/router"
 	"github.com/shahfaiz-07/capella_api/internal/service"
+	"github.com/shahfaiz-07/capella_api/internal/sse"
 )
 
 type Server struct {
@@ -23,6 +24,9 @@ func New(cfg *config.Config) (*Server, error) {
 		return nil, err
 	}
 
+	broker := sse.New()
+	broker.Run()
+
 	bucketPath := fmt.Sprintf("`%s`.`%s`.`%s`", cfg.CPBucketName, cfg.CPScopeName, cfg.CPCollection)
 
 	// err = ensureIndexes(cluster, bucketPath)
@@ -34,8 +38,10 @@ func New(cfg *config.Config) (*Server, error) {
 	userServices := service.NewUserService(cluster, collection, bucketPath, cfg.JWTSecret)
 	userHandlers := handler.NewUserHandler(userServices)
 	
-	todoServices := service.NewTodoService(cluster, collection, bucketPath)
+	todoServices := service.NewTodoService(cluster, collection, broker, bucketPath)
 	todoHandlers := handler.NewTodoHandler(todoServices)
+
+	sseHandlers := handler.NewSSEHandler(broker)
 
 	r := router.Router()
 
@@ -47,6 +53,7 @@ func New(cfg *config.Config) (*Server, error) {
 
 	userHandlers.Register(r)
 	todoHandlers.Register(r, cfg.JWTSecret)
+	sseHandlers.Register(r, cfg.JWTSecret)
 
 	s := &Server{
 		httpServer: &http.Server{
