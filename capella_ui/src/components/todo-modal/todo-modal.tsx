@@ -64,7 +64,7 @@ export function TodoModal({ state, edit=false, title, description, status, prior
             setValue("tags", "")
             setStatusValue("")
         }
-    }, [state])
+    }, [state.isOpen])
 
     const [ statusValue, setStatusValue ] = useState<string>(status ?? "")
 
@@ -111,7 +111,7 @@ export function TodoModal({ state, edit=false, title, description, status, prior
 
                         <Modal.Body className="space-y-4">
                             {
-                                edit && <div>{id}</div>
+                                edit && <div className="text-sm text-gray-400">{id}</div>
                             }
                             <Form
                                 onSubmit={handleSubmit(onSubmit)}
@@ -138,7 +138,7 @@ export function TodoModal({ state, edit=false, title, description, status, prior
                                             onBlur={onBlur}
                                             isInvalid={invalid}
                                         >
-                                            <Label>Description</Label>
+                                            <Label>Title</Label>
                                             <Input placeholder="Title" />
                                             <FieldError>
                                                 {error?.message}
