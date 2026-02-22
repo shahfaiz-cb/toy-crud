@@ -70,6 +70,7 @@ func (s *TodoService) FetchUserTodos(userId string) ([]*model.Todo, error) {
 		SELECT t.*
 		FROM ` + s.bucketPath + ` t
 		WHERE t.type = "todo" AND t.userId = $userId
+		ORDER BY t.createdAt DESC
 	`
 
 	queryOptions := &gocb.QueryOptions{
@@ -316,6 +317,7 @@ func (s *TodoService) FetchQuery(userId, queryString string) ([]*model.Todo, err
 		FROM ` + s.bucketPath + ` t
 		WHERE t.type="todo" AND t.userId = $userId
 			AND (LOWER(t.title) LIKE $searchString OR LOWER(t.description) LIKE $searchString)
+			ORDER BY t.createdAt DESC
 	`
 
 	searchString := "%" + strings.ToLower(queryString) + "%"
